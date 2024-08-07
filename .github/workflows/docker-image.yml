@@ -29,19 +29,22 @@ jobs:
     - name: Docker Login
       env:
         DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        NEW_VERSION:   ${{ steps.version.outputs.version }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
       run: |        
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
         echo "--- NEW VERSION $NEW_VERSION!!!"
 
-    # - name: Docker Build Image
-    #   run: |
-    #      docker build -t xreedit/ddgraphql:0.0.2 .
+    - name: Docker Build Image
+      env:
+        NEW_VERSION:   ${{ steps.version.outputs.version }}
+      run: |
+         docker build -t xreedit/ddgraphql:$NEW_VERSION .
 
-    # - name: Docker Push
-    #   run: |
-    #      docker push xreedit/ddgraphql:0.0.2
+    - name: Docker Push
+      env:
+        NEW_VERSION:   ${{ steps.version.outputs.version }}
+      run: |
+         docker push xreedit/ddgraphql:$NEW_VERSION
         
 
         
